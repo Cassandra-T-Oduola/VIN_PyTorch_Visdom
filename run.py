@@ -108,7 +108,7 @@ def train_vin(datafile='./data/gridworld_8x8.npz',imsize=8,
     # Testing...
     return net
 def test_vin(net, args):
-    testset = GridworldData(args.datafile, imsize=args.imsize, train=False, transform=transform)
+    testset = GridworldData(args.datafile, imsize=args.imsize, train=False, transform=None)
     testloader = torch.utils.data.DataLoader(testset, batch_size=args.batch_size, shuffle=False, num_workers=0)
 
     
