@@ -167,7 +167,7 @@ def test_vin(net, args):
 
     # Save grid image, reward image and value images
     imgs = np.concatenate([net.grid_image] + [net.reward_image] + net.value_images)
-    np.savez_compressed('learned_rewards_values_{:d}x{:d},k={:d}'.format(args.imsize, args.imsize), imgs, args.k)
+    np.savez_compressed('learned_rewards_values_{:d}x{:d},k={:d}'.format(args.imsize, args.imsize, imgs, args.k))
 
     print('\nRecorded reward and value images.\n')
     return net, imgs
