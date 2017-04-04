@@ -13,7 +13,7 @@ import torchvision.transforms as transforms
 
 from dataset import *
 from VIN import *
-
+from copy import deepcopy
 
 # Automatic swith of GPU mode if available
 use_GPU = torch.cuda.is_available()
@@ -39,7 +39,8 @@ args = Args({'datafile':'./data/gridworld_8x8.npz',
 def train_vin(datafile='./data/gridworld_8x8.npz',imsize=8,
               lr=.002, epochs=30, k=10, ch_i = 2, ch_h =150, ch_q = 10,
               batch_size=128):
-    net = VIN(Args(locals()))
+    args = Args(locals())
+    net = VIN(args)
 
     if use_GPU:
          net = net.cuda()
@@ -106,7 +107,8 @@ def train_vin(datafile='./data/gridworld_8x8.npz',imsize=8,
     print('\nFinished training. \n')
 
     # Testing...
-    return net
+    return net, args
+
 def test_vin(net, args):
     testset = GridworldData(args.datafile, imsize=args.imsize, train=False, transform=None)
     testloader = torch.utils.data.DataLoader(testset, batch_size=args.batch_size, shuffle=False, num_workers=0)
@@ -167,7 +169,7 @@ def test_vin(net, args):
 
     # Save grid image, reward image and value images
     imgs = np.concatenate([net.grid_image] + [net.reward_image] + net.value_images)
-    np.savez_compressed('learned_rewards_values_{:d}x{:d},k={:d}'.format(args.imsize, args.imsize, imgs, args.k))
+    # np.savez_compressed('learned_rewards_values_{:d}x{:d}k{:d}'.format(args.imsize, args.imsize, imgs, args.k))
 
     print('\nRecorded reward and value images.\n')
-    return net, imgs
+    return imgs
